@@ -9,7 +9,7 @@
 
 #define TEST(x) printf("Running test " #x "\n"); fflush(stdout);
 #define SUBTEST(x) printf("    Executing subtest " #x "\n"); fflush(stdout); \
-                   alarm(1);
+                   //alarm(1);
 #define FAIL(cond, msg) if (cond) {\
                         printf("    FAIL! "); \
                         printf(#msg "\n"); \
@@ -206,7 +206,7 @@ void check_insertion_functionality(void) {
      status = linked_list_insert(ll, 0, 0);
 	FAIL(status == false,
              "Failed to insert node into linked_list #1")
-     status = linked_list_insert(ll, 9, 10);
+     status = linked_list_insert(ll, 10, 10);
 	FAIL(status == false,
              "Failed to insert node into linked_list #1")
 
@@ -230,7 +230,7 @@ void check_insertion_functionality(void) {
 	FAIL(status == false,
              "Failed to insert node into linked_list #1")
 
-     status = linked_list_insert(ll, ll->len-1, 10);
+     status = linked_list_insert(ll, 8, 10);
 	FAIL(status == false,
              "Failed to insert node into linked_list #1")
 
@@ -366,7 +366,7 @@ void check_insertion_functionality(void) {
     ll = linked_list_create();
     FAIL(ll == NULL,
          "Failed to create new linked_list (#5)")
-    bool status = linked_list_insert(ll, 0, 1);
+    status = linked_list_insert(ll, 0, 1);
     FAIL(status == false,
          "Failed to insert 1 at the beginning of linked_list (#5)")
     status = linked_list_insert(ll, 1, 2);

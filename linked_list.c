@@ -42,13 +42,13 @@ static struct node * linked_list_traverse_to_index(struct linked_list * ll, unsi
 
     // Determine if it's quicker to iterate to the desired index from the head or tail
     struct node * current;
-    if (index >= ll->len/2) {
+    if (index >= ll->len/2) {  // If the index is in the tail half of the list, iterate from the tail
         current = ll->tail->prev; // iterate from tail->prev rather than tail to save some cycles
         for (unsigned int i = ll->len-2; i > index && current != NULL; i--) {
             current = current->prev;
         }
     }
-    else {
+    else {  // If the index is in the head half of the list, iterate from the head
         current = ll->head->next; // iterate from tail->prev rather than tail to save some cycles
         for (unsigned int i = 1; i < index && current != NULL; i++) {
             current = current->next;
@@ -148,9 +148,6 @@ bool linked_list_insert_front(struct linked_list * ll, unsigned int data) {
 bool linked_list_insert(struct linked_list * ll, size_t index, unsigned int data) {
     // Perform checks
     INVALID_PTR_CHECK(ll, false);
-    if (index >= ll->len) {
-        return false;
-    }
 
     // Create a new node
     struct node * new = create_node(data);
@@ -159,11 +156,14 @@ bool linked_list_insert(struct linked_list * ll, size_t index, unsigned int data
     if (index == 0) {
         return linked_list_insert_front(ll, data);
     } 
-    else if (index == ll->len-1) { // access ll->len here to cache it
+    else if (index == ll->len) { 
         return linked_list_insert_end(ll, data);
     } 
 
     struct node * current = linked_list_traverse_to_index(ll, index);
+    if (current == NULL) {
+        return NULL;
+    }
 
     // Insert the new node before current, tying up all prev and next pointers
     new->prev = current->prev;
@@ -218,6 +218,9 @@ bool linked_list_remove(struct linked_list * ll, size_t index) {
     }
 
     struct node * current = linked_list_traverse_to_index(ll, index);
+    if (current == NULL) {
+        return NULL;
+    }
 
     // otherwise, current points to the index for deletion
     current->prev->next = current->next;
@@ -237,6 +240,9 @@ struct iterator * linked_list_create_iterator(struct linked_list * ll, size_t in
 
     // Traverse to the specified node
     struct node * current = linked_list_traverse_to_index(ll, index);
+    if (current == NULL) {
+        return NULL;
+    }
 
     if (current == NULL) {
         return NULL;
