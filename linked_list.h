@@ -22,6 +22,8 @@
 struct node;
 struct linked_list {
     struct node * head;
+    struct node * tail;
+    unsigned int len;
 };
 
 // A node in the linked_list structure.
@@ -29,6 +31,7 @@ struct linked_list {
 //
 struct node {
     struct node * next;
+    struct node * prev;
     unsigned int data;
 };
 
@@ -37,6 +40,7 @@ struct node {
 struct iterator {
     struct linked_list * ll;
     struct node * current_node;
+    struct node * previous_node;
     size_t current_index;
     unsigned int data;
 };

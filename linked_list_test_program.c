@@ -180,6 +180,87 @@ void check_insertion_functionality(void) {
     linked_list_delete(ll);
     linked_list_delete_iterator(iter);
 
+    SUBTEST(insert_all)
+    ll = linked_list_create();
+    ll_size          = SIZE_MAX;
+    FAIL(ll == NULL,
+         "Failed to create new linked_list (#1)")
+    for (size_t i = 6; i < 10; i++) {
+        bool status = linked_list_insert_end(ll, i);
+	FAIL(status == false,
+             "Failed to insert node into linked_list #1")
+    }
+
+    for (size_t i = 3; i > 0; i--) {
+        bool status = linked_list_insert_front(ll, i);
+     FAIL(status == false,
+               "Failed to insert node into linked_list #1")
+    }
+
+     bool status = linked_list_insert(ll, 3, 4);
+	FAIL(status == false,
+             "Failed to insert node into linked_list #1")
+     status = linked_list_insert(ll, 4, 5);
+	FAIL(status == false,
+             "Failed to insert node into linked_list #1")
+     status = linked_list_insert(ll, 0, 0);
+	FAIL(status == false,
+             "Failed to insert node into linked_list #1")
+     status = linked_list_insert(ll, 9, 10);
+	FAIL(status == false,
+             "Failed to insert node into linked_list #1")
+
+     status = linked_list_remove(ll, 0);
+	FAIL(status == false,
+             "Failed to remove node into linked_list #1")
+
+     status = linked_list_remove(ll, 9);
+	FAIL(status == false,
+             "Failed to remove node into linked_list #1")
+
+     status = linked_list_remove(ll, 2);
+	FAIL(status == false,
+             "Failed to remove node into linked_list #1")
+
+     status = linked_list_remove(ll, 6);
+	FAIL(status == false,
+             "Failed to remove node into linked_list #1")
+
+     status = linked_list_insert(ll, 0, 0);
+	FAIL(status == false,
+             "Failed to insert node into linked_list #1")
+
+     status = linked_list_insert(ll, ll->len-1, 10);
+	FAIL(status == false,
+             "Failed to insert node into linked_list #1")
+
+     status = linked_list_insert(ll, 3, 3);
+	FAIL(status == false,
+             "Failed to insert node into linked_list #1")
+
+     status = linked_list_insert(ll, 8, 8);
+	FAIL(status == false,
+             "Failed to insert node into linked_list #1")
+
+    iter = linked_list_create_iterator(ll, 0);
+    FAIL(iter == NULL,
+         "Failed to create new iterator for linked_list (#1)")
+
+    for (size_t i = 0; i <= 10; i++) {
+        FAIL(iter->data != i,
+             "Iterator does not contain correct data for linked_list (#1)")
+        FAIL(iter->current_index != i,
+             "Iterator does not contain correct index for linked_list (#1)")
+
+        // Next element.
+	//
+	linked_list_iterate(iter);
+    }
+    FAIL(!linked_list_delete(ll),
+         "linked_list_delete() does not return true")
+    FAIL(!linked_list_delete_iterator(iter),
+         "linked_list_delete_iterator() does not return true")
+
     // Check insertion at front with an iterator.
     // Inserts 4, 3, 2, 1 into the list, verifies data.
     //
