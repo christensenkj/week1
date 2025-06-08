@@ -243,10 +243,6 @@ struct iterator * linked_list_create_iterator(struct linked_list * ll, size_t in
     if (current == NULL) {
         return NULL;
     }
-
-    if (current == NULL) {
-        return NULL;
-    }
     else {
         it->current_node = current;
         it->data = current->data;
