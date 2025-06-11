@@ -40,7 +40,6 @@ struct node {
 struct iterator {
     struct linked_list * ll;
     struct node * current_node;
-    struct node * previous_node;
     size_t current_index;
     unsigned int data;
 };

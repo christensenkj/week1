@@ -18,7 +18,7 @@ static void * (*malloc_fptr)(size_t size) = NULL;
 static void   (*free_fptr)(void* addr)    = NULL; 
 
 /* Create a new linked list node */
-static struct node * create_node(unsigned int data) {
+static inline struct node * create_node(unsigned int data) {
     struct node * new = (struct node *) malloc_fptr(sizeof(struct node));
     new->data = data;
     new->next = NULL;
@@ -28,7 +28,7 @@ static struct node * create_node(unsigned int data) {
 
 /* Determine if it's quicker to reach the desired index from the head or the tail and
    return a pointer to the node at the provided index */
-static struct node * linked_list_traverse_to_index(struct linked_list * ll, unsigned int index) {
+static inline struct node * linked_list_traverse_to_index(struct linked_list * ll, unsigned int index) {
     // Check edges and bad inputs
     if (index == 0) {
         return ll->head;
@@ -68,6 +68,7 @@ struct linked_list * linked_list_create(void) {
     struct linked_list * ll = (struct linked_list *) malloc_fptr(sizeof(struct linked_list));
     if (ll != NULL) {
         ll->head = NULL;
+        ll->tail = NULL;
         ll->len = 0;
     }
     return ll;
@@ -149,9 +150,6 @@ bool linked_list_insert(struct linked_list * ll, size_t index, unsigned int data
     // Perform checks
     INVALID_PTR_CHECK(ll, false);
 
-    // Create a new node
-    struct node * new = create_node(data);
-
     // Handle special cases up front 
     if (index == 0) {
         return linked_list_insert_front(ll, data);
@@ -164,6 +162,9 @@ bool linked_list_insert(struct linked_list * ll, size_t index, unsigned int data
     if (current == NULL) {
         return NULL;
     }
+
+    // Create a new node
+    struct node * new = create_node(data);
 
     // Insert the new node before current, tying up all prev and next pointers
     new->prev = current->prev;
@@ -234,16 +235,15 @@ bool linked_list_remove(struct linked_list * ll, size_t index) {
 struct iterator * linked_list_create_iterator(struct linked_list * ll, size_t index) {
     INVALID_PTR_CHECK(ll, NULL);
 
-    struct iterator * it = (struct iterator *) malloc_fptr(sizeof(struct iterator));
-    it->ll = ll;
-    it->current_index = index;
-
     // Traverse to the specified node
     struct node * current = linked_list_traverse_to_index(ll, index);
     if (current == NULL) {
         return NULL;
     }
     else {
+        struct iterator * it = (struct iterator *) malloc_fptr(sizeof(struct iterator));
+        it->ll = ll;
+        it->current_index = index;
         it->current_node = current;
         it->data = current->data;
         return it;
