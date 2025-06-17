@@ -24,13 +24,16 @@ linked_list_test_program: liblinked_list.so $(FUNCTIONAL_TEST_OBJECT_FILES)
 	$(CC) -o $@ $(FUNCTIONAL_TEST_OBJECT_FILES)  -L `pwd` -llinked_list
 
 run_functional_tests: linked_list_test_program
-	LD_LIBRARY_PATH=`pwd`:$LD_LIBRARY_PATH ./linked_list_test_program
+	LD_LIBRARY_PATH=`pwd`:$$LD_LIBRARY_PATH ./linked_list_test_program
 
 run_functional_tests_gdb: linked_list_test_program
-	LD_LIBRARY_PATH=`pwd`:$LD_LIBRARY_PATH gdb ./linked_list_test_program
+	LD_LIBRARY_PATH=`pwd`:$$LD_LIBRARY_PATH gdb ./linked_list_test_program
+
+run_valgrind_tests: linked_list_test_program
+	LD_LIBRARY_PATH=`pwd`:$$LD_LIBRARY_PATH valgrind ./linked_list_test_program
 
 %.o : %.c
 	$(CC) -c $(CFLAGS) $^ -o $@
 
 clean:
-	rm $(LINKED_LIST_OBJECT_FILES) $(FUNCTIONAL_TEST_OBJECT_FILES) liblinked_list.so linked_list_test_program
+	rm $(LINKED_LIST_OBJECT_FILES) $(FUNCTIONAL_TEST_OBJECT_FILES) $(PERFORMANCE_TEST_OBJECT_FILES) liblinked_list.so linked_list_test_program 
